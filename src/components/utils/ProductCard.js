@@ -68,7 +68,7 @@ const StyledLikeIcon = styled(FaRegHeart)`
 `;
 
 const ProductCard = ({ product }) => {
-    console.log("this is what the Productcard component is getting:", product.product)
+    // console.log("this is what the Productcard component is getting:", product.product)
   return (
     <StyledCard>
       <StyledCardMedia

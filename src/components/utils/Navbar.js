@@ -14,6 +14,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import SecondaryNavbar from './SecondaryNavbar';
+import { Divider } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 },
     Toolbar: {
       alignItems: 'center',
-      height: '80px'
+      height: 'auto'
   },
   title: {
     flexGrow: 1,
@@ -92,10 +93,16 @@ const useStyles = makeStyles((theme) => ({
   logoIcon: {
     color: theme.palette.secondary.main,
     fontSize: 'large'
-  }
+  },
+  divider: {
+    backgroundColor: theme.palette.primary2.main,
+    height: 1,
+    width: '100%'
+  },
 }));
 
-const Navbar = () => {
+const Navbar = ( { categories } ) => {
+    console.log('This is what the navbar received:::', categories)
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -107,16 +114,17 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  const renderMenuItems = () => {
+  const renderMenuItems = ( catgs ) => {
+    Object.keys(catgs).forEach(cat => console.log(cat))
     return (
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleMenuClose}>Menu Item 1</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Menu Item 2</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Menu Item 3</MenuItem>
+        <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+        >
+        {Object.keys(catgs).map((cat) => {
+            return <MenuItem onClick={handleMenuClose}>{cat}</MenuItem>
+        })}
       </Menu>
     );
   };
@@ -140,12 +148,12 @@ const Navbar = () => {
                 onClick={handleMenuOpen}
                 >
                 <AppsIcon />
-                <Typography variant="body1" style={{fontWeight: 'bold'}}>
+                <Typography variant="body2" style={{fontWeight: 'bold'}}>
                     Departments
                 </Typography>
                 </IconButton>
             </Grid>
-            {renderMenuItems()}
+            {/* {renderMenuItems(categories)} */}
             
             {/* Search Bar */}
             <div className={classes.search}>
@@ -170,7 +178,8 @@ const Navbar = () => {
             </IconButton>
         </Toolbar>
         </AppBar>
-        <SecondaryNavbar />
+        <Divider className={classes.divider} />
+        <SecondaryNavbar categories={categories}/>
     </div>
   );
 };

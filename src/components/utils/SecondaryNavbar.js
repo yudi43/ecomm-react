@@ -3,6 +3,8 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,34 +25,59 @@ const useStyles = makeStyles((theme) => ({
   categories: {
     textTransform: 'capitalize',
     color: theme.palette.bg.main,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: '0.8em'
+  },
+  dptGrid: {
+
+    display:'None',
+    [theme.breakpoints.up('sm')]: {
+        display: 'flex',
+        alignItems: 'center',
+      
+    },
+  },
+
+  locationIcon: {
+    height: '100%',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: theme.palette.secondary.main,
+  },
+
+  locationText: {
+    color: '#ffffff',
+    fontSize: '0.7em'
   }
 }));
 
-const AppHeader = () => {
-  const classes = useStyles();
+const SecondaryNavbar = ( { categories } ) => {
+    const classes = useStyles();
+  
+    return ( 
+      <Box className={classes.root}>
 
-  return (
-    <Box className={classes.root}>
-      <Box className={classes.leftText}>
-        <Typography variant="subtitle2" color="textSecondary">
-          Left Text
-        </Typography>
+        <Grid className={classes.dptGrid}>
+                <LocationOnIcon className={classes.locationIcon}/>
+                <Typography variant="subtitle2" className={classes.locationText}>
+                    Yelahanka, Bengaluru - 560064
+                </Typography>
+        </Grid>
+        <Box className={classes.buttonsContainer}>
+          {categories.slice(0,7).map((item) => {
+              return (
+                  <Button disableElevation disableFocusRipple disableRipple>
+                      <Typography variant="subtitle2" className={classes.categories}>
+                          {item}
+                      </Typography>
+                  </Button>                
+              )
+          })}
+        </Box>
       </Box>
-      <Box className={classes.buttonsContainer}>
-        <Button disableElevation disableFocusRipple disableRipple>
-            <Typography variant="body1" className={classes.categories}>
-                Button 1
-            </Typography>
-        </Button>
-        <Button disableElevation disableFocusRipple disableRipple>
-            <Typography variant="body1" className={classes.categories}>
-                Button 1
-            </Typography>
-        </Button>
-      </Box>
-    </Box>
-  );
-}
-
-export default AppHeader;
+    );
+  }
+  
+export default SecondaryNavbar;
