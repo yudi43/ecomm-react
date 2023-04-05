@@ -1,0 +1,29 @@
+[33mcommit 8dbdd6345a1f60475e64cb35c5731f11957ec102[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Yudi <singh.yudi10@gmail.com>
+Date:   Thu Apr 6 00:24:25 2023 +0530
+
+    Completed navbar, search styling remains
+
+[33mcommit 52e67df43e3bd94bd4b3263de1ca9268dcd97b39[m
+Author: Yudi <singh.yudi10@gmail.com>
+Date:   Wed Apr 5 15:26:30 2023 +0530
+
+    add more styles to header
+
+[33mcommit eedd783867e1b1340bc9539eb5de77ab064b7598[m
+Author: Yudi <singh.yudi10@gmail.com>
+Date:   Wed Apr 5 10:29:46 2023 +0530
+
+    add header and subheader
+
+[33mcommit b59b2411de2d63f9559c3308ae7b7b64003f003c[m
+Author: Yudi <singh.yudi10@gmail.com>
+Date:   Wed Apr 5 03:29:01 2023 +0530
+
+    make ProductList, ProductCard, CategoryNavbar with initial styling
+
+[33mcommit db3d3fc509639d76059185ee946c953c54ba74bd[m
+Author: Yudi <singh.yudi10@gmail.com>
+Date:   Tue Apr 4 08:55:24 2023 +0530
+
+    Initial commit for ecomm project setup
