@@ -19,6 +19,27 @@ function LandingPage() {
           .then(data => {
               setAllCategories(data);
               console.log("got data", data);
+              setLoading(false);
+              console.log("this is category grouping:", categoryGrouping);
+              // setAllCategories(categoryGrouping);
+            });
+        } catch (error) {
+          console.log("Error fetching categories:", error);
+        }
+        
+      }, []);
+
+    return ( 
+    <div>
+        <Navbar categories={allCategories}/>
+        <ProductList />
+    </div> );
+}
+
+export default LandingPage;
+
+
+
               // data.forEach((item) => {
               //   if(item.includes("womens-")) {
               //     if ("Women" in categoryGrouping) {
@@ -43,21 +64,4 @@ function LandingPage() {
         
               //   }
               // })
-              setLoading(false);
-              console.log("this is category grouping:", categoryGrouping);
-              // setAllCategories(categoryGrouping);
-            });
-        } catch (error) {
-          console.log("Error fetching categories:", error);
-        }
-        
-      }, []);
-
-    return ( 
-    <div>
-        <Navbar categories={allCategories}/>
-        <ProductList />
-    </div> );
-}
-
-export default LandingPage;
+              

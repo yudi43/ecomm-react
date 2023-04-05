@@ -102,7 +102,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = ( { categories } ) => {
-    console.log('This is what the navbar received:::', categories)
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -115,17 +114,12 @@ const Navbar = ( { categories } ) => {
   };
 
   const renderMenuItems = ( catgs ) => {
-    Object.keys(catgs).forEach(cat => console.log(cat))
     return (
-        <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-        >
-        {Object.keys(catgs).map((cat) => {
-            return <MenuItem onClick={handleMenuClose}>{cat}</MenuItem>
-        })}
-      </Menu>
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>        
+            {catgs.map((cat, index) => {
+                return <MenuItem key={index} onClick={handleMenuClose}>{cat}</MenuItem>
+            })}
+        </Menu>
     );
   };
 
@@ -153,7 +147,7 @@ const Navbar = ( { categories } ) => {
                 </Typography>
                 </IconButton>
             </Grid>
-            {/* {renderMenuItems(categories)} */}
+            {renderMenuItems(categories)}
             
             {/* Search Bar */}
             <div className={classes.search}>
