@@ -25,6 +25,8 @@ const useStyles = makeStyles((theme) => ({
   Toolbar: {
     alignItems: "center",
     height: "auto",
+    paddingTop: "10px",
+    paddingBottom: "10px",
   },
   title: {
     flexGrow: 1,
@@ -34,8 +36,14 @@ const useStyles = makeStyles((theme) => ({
   dropdownButton: {
     // marginLeft: theme.spacing(1),
     // marginRight: theme.spacing(1),
+    borderRadius: "10px",
+    backgroundColor: "#005EB5",
+    // color: theme.palette.primary1.main,
     textTransform: "none",
     color: "inherit",
+    "&:hover": {
+      backgroundColor: "#004D96",
+    },
   },
   search: {
     position: "relative",
@@ -52,12 +60,15 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between" /* Add this line */,
   },
   searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
+    padding: theme.spacing(0.2, 0.2),
+    margin: theme.spacing(0.5, 0.5),
+    height: "80%",
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
-    color: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.main,
+    color: "#ffffff",
+    borderRadius: "40%",
   },
 
   //input section
@@ -67,8 +78,6 @@ const useStyles = makeStyles((theme) => ({
   inputInput: {
     color: theme.palette.primary1.main,
     fontSize: "0.9em",
-    // padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(0.2)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -97,6 +106,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
+  },
+  ctgIcon: {
+    color: theme.palette.secondary.main,
   },
   logoIcon: {
     color: theme.palette.secondary.main,
@@ -150,21 +162,17 @@ const Navbar = ({ categories }) => {
         <Toolbar className={classes.Toolbar}>
           {/* Logo */}
           <Grid className={classes.title}>
-            <Typography variant="h6">QuickBuy</Typography>
+            <Typography variant="h4">QuickBuy</Typography>
             <KeyboardDoubleArrowRightIcon className={classes.logoIcon} />
           </Grid>
           {/* Dropdown Button */}
           <Grid className={classes.dptGrid}>
             <IconButton
               className={classes.dropdownButton}
-              color="inherit"
               onClick={handleMenuOpen}
             >
-              <AppsIcon />
-              <Typography
-                variant="body2"
-                style={{ fontWeight: "bold", marginLeft: "2px" }}
-              >
+              <AppsIcon className={classes.ctgIcon} />
+              <Typography variant="body1" style={{ marginLeft: "5px" }}>
                 Departments
               </Typography>
             </IconButton>
