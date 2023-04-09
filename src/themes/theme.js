@@ -6,6 +6,11 @@ const theme = createTheme({
       main: "#127CDF",
       contrastText: "#ffffff",
     },
+    primary1Dark: {
+      main: "#004D96",
+      another: "#005EB5",
+      contrastText: "#ffffff",
+    },
     primary2: {
       main: "#499DE6",
       contrastText: "#ababab",

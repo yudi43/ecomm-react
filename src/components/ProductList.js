@@ -16,7 +16,6 @@ function ProductList({ selectedCategory }) {
     fetch(url + `?page=${page}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("got data", data);
         setProducts(data.products);
         setLoading(false);
       });

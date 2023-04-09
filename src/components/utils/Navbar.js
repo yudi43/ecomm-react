@@ -161,7 +161,6 @@ const Navbar = ({ selectedCategory }) => {
     } else {
       result = category.charAt(0).toUpperCase() + category.slice(1);
     }
-    console.log("this is the result", result);
     return result;
   };
 
@@ -255,7 +254,10 @@ const Navbar = ({ selectedCategory }) => {
         </Toolbar>
       </AppBar>
       <Divider className={classes.divider} />
-      <SecondaryNavbar categories={allCategories} />
+      <SecondaryNavbar
+        categories={allCategories}
+        currentSelectedCategory={selectedCategory}
+      />
     </div>
   );
 };

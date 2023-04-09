@@ -13,15 +13,12 @@ function LandingPage() {
   const [allCategories, setAllCategories] = useState([]);
 
   useEffect(() => {
-    console.log("fetching inital products data");
     try {
       fetch(`https://dummyjson.com/products/categories`)
         .then((response) => response.json())
         .then((data) => {
           setAllCategories(data);
-          console.log("got data", data);
           setLoading(false);
-          console.log("this is category grouping:", categoryGrouping);
           // setAllCategories(categoryGrouping);
         });
     } catch (error) {

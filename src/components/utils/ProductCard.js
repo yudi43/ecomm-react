@@ -122,6 +122,16 @@ const StyledButton = styled.button`
   margin: 0 0.5rem;
 `;
 
+const AddToCartContainer = styled.div`
+  display: "flex",
+  align-items: "center",
+  justify-content: "center",
+  border: "4px solid #127CDF",
+  border-radius: "15px",
+  background-color: "#127CDF",
+  margin-right: "15px",
+`;
+
 const ProductCard = ({ product }) => {
   const [quantity, setQuantity] = useState(0);
   function truncate(str, n) {
@@ -137,31 +147,25 @@ const ProductCard = ({ product }) => {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
-  const AddToCartContainer = styled.div`
-    display: "flex",
-    align-items: "center",
-    justify-content: "center",
-    border: "4px solid #127CDF",
-    border-radius: "15px",
-    background-color: "#127CDF",
-    margin-right: "15px",
-`;
 
   const handleRemoveItemFromCart = (event, prd) => {
     // remove product 'prd' from cart
     event.stopPropagation();
-    console.log("Remove item -> ", prd);
   };
 
   const handleAddItemToCart = (event, prd) => {
     // add product 'prd' to cart
     event.stopPropagation();
-    console.log("Add item -> ", prd);
   };
 
   const handleProductCardClick = (event, prd) => {
     // add product 'prd' to cart
-    console.log("Card is click, for item -> ", prd);
+    console.log("this was the event variable: ", event);
+    console.log("clicked on the card with product as : ", prd);
+
+    // navigate user from here to product detail page with id of the product
+    let productId = prd.product.id;
+    console.log("This is the productId", productId);
   };
 
   return (

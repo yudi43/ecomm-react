@@ -24,11 +24,19 @@ const useStyles = makeStyles((theme) => ({
   buttonsContainer: {
     marginRight: theme.spacing(2),
   },
+  navButton: {
+    height: "100%",
+    color: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary1Dark.another,
+    "&:hover": {
+      backgroundColor: theme.palette.primary1Dark.another,
+    },
+  },
   categories: {
     textTransform: "capitalize",
     color: theme.palette.bg.main,
     fontWeight: "bold",
-    fontSize: "0.9em",
+    fontSize: "1em",
   },
   dptGrid: {
     display: "None",
@@ -37,25 +45,24 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
-
   locationIcon: {
-    height: "100%",
+    transform: "scale(1.2)",
     pointerEvents: "none",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     color: theme.palette.secondary.main,
     marginLeft: "15px",
+    marginRight: "5px",
   },
-
   locationText: {
-    color: "#ffffff",
-    fontSize: "0.8em",
-    marginLeft: "5px",
+    color: theme.palette.bg.main,
+    fontWeight: "bold",
+    fontSize: "0.85em",
   },
 }));
 
-const SecondaryNavbar = ({ categories }) => {
+const SecondaryNavbar = ({ categories, currentSelectedCategory }) => {
   const classes = useStyles();
   const [location, setLocation] = useState(null);
   const navigate = useNavigate();
@@ -68,18 +75,55 @@ const SecondaryNavbar = ({ categories }) => {
         )
           .then((response) => response.json())
           .then((data) => {
-            console.log("This was the location returned:", data);
             setLocation(data.address);
           })
           .catch((error) => console.log(error));
       },
       (error) => console.log(error)
     );
-  }, []);
+  }, [categories, currentSelectedCategory]);
 
   const handleCategoryClick = (categoryClicked) => {
-    //do something
-    navigate(`/categories/${categoryClicked}`);
+    navigate(`/categories/${categoryClicked}`); //navigate the user to Category page
+  };
+
+  const renderCategoryButtons = (navButtonCssClass, categoryTextCssClass) => {
+    return categories
+      .slice(0, 20)
+      .filter((item) => !item.includes("men"))
+      .map((singleCategory, index) => {
+        if (singleCategory === currentSelectedCategory) {
+          return (
+            <Button
+              className={navButtonCssClass}
+              variant="contained"
+              onClick={() => handleCategoryClick(singleCategory)}
+              key={index}
+              disableElevation
+              disableFocusRipple
+              disableRipple
+            >
+              <Typography variant="subtitle1" className={categoryTextCssClass}>
+                {singleCategory}
+              </Typography>
+            </Button>
+          );
+        } else {
+          return (
+            <Button
+              onClick={() => handleCategoryClick(singleCategory)}
+              key={index}
+              disableElevation
+              disableFocusRipple
+              disableRipple
+            >
+              <Typography variant="subtitle1" className={categoryTextCssClass}>
+                {singleCategory}
+              </Typography>
+            </Button>
+          );
+        }
+      });
   };
 
   return (
@@ -98,24 +142,7 @@ const SecondaryNavbar = ({ categories }) => {
         </Typography>
       </Grid>
       <Box className={classes.buttonsContainer}>
-        {categories
-          .slice(0, 20)
-          .filter((item) => !item.includes("men"))
-          .map((item, index) => {
-            return (
-              <Button
-                onClick={() => handleCategoryClick(item)}
-                key={index}
-                disableElevation
-                disableFocusRipple
-                disableRipple
-              >
-                <Typography variant="subtitle1" className={classes.categories}>
-                  {item}
-                </Typography>
-              </Button>
-            );
-          })}
+        {renderCategoryButtons(classes.navButton, classes.categories)}
       </Box>
     </Box>
   );
