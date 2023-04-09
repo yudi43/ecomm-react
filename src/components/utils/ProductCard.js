@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   Grid,
@@ -91,6 +92,11 @@ const StyledLikeIcon = styled(FaRegHeart)`
 `;
 
 const StyledQuantity = styled.div`
+  ${(props) => css`
+    background-color: ${props.theme.palette.primary1.main};
+    color: ${props.theme.palette.bg.main};
+    //
+  `}
   display: flex;
   align-items: center;
   // font-weight: bold;
@@ -98,20 +104,22 @@ const StyledQuantity = styled.div`
 `;
 
 const StyledButton = styled.button`
+  ${(props) => css`
+    background-color: ${props.theme.palette.primary1.main};
+    color: ${props.theme.palette.bg.main};
+    &:hover {
+      color: ${props.theme.palette.secondary.main};
+    }
+  `}
   display: flex;
   border: none;
   align-items: center;
   justify-content: center;
-  background: none;
-  font-size: 1.2rem;
-  stroke-width="0.5";
+  font-size: 1rem;
   cursor: pointer;
-  color: #888;
+  // color: #888;
   transition: color 0.2s ease-in-out;
   margin: 0 0.5rem;
-  &:hover {
-    color: #f44336;
-  }
 `;
 
 const ProductCard = ({ product }) => {
@@ -129,77 +137,120 @@ const ProductCard = ({ product }) => {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
+  const AddToCartContainer = styled.div`
+    display: "flex",
+    align-items: "center",
+    justify-content: "center",
+    border: "4px solid #127CDF",
+    border-radius: "15px",
+    background-color: "#127CDF",
+    margin-right: "15px",
+`;
+
+  const handleRemoveItemFromCart = (event, prd) => {
+    // remove product 'prd' from cart
+    event.stopPropagation();
+    console.log("Remove item -> ", prd);
+  };
+
+  const handleAddItemToCart = (event, prd) => {
+    // add product 'prd' to cart
+    event.stopPropagation();
+    console.log("Add item -> ", prd);
+  };
+
+  const handleProductCardClick = (event, prd) => {
+    // add product 'prd' to cart
+    console.log("Card is click, for item -> ", prd);
+  };
+
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
-      <StyledCard>
-        <StyledCardMedia
-          image={product.product.thumbnail}
-          title={product.product.title}
-        />
+      <CardActionArea
+        onClick={(event) => handleProductCardClick(event, product)}
+      >
+        <StyledCard>
+          <StyledCardMedia
+            image={product.product.thumbnail}
+            title={product.product.title}
+          />
 
-        <div>
-          <StyledCardContent>
+          <div>
+            <StyledCardContent>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignContent: "center",
+                }}
+              >
+                <div style={{ flex: 1 }}>
+                  <StyledTitle variant="body1">
+                    {product.product.title}
+                  </StyledTitle>
+                  <StyledSubtitle variant="subtitle2">
+                    {product.product.brand} - {product.product.category}
+                  </StyledSubtitle>
+                </div>
+                <StyledLikeIcon />
+              </div>
+              <StyledRating value={product.product.rating} readOnly />
+              <StyledDescription variant="body1" theme={theme}>
+                {truncate(product.product.description, 80)}
+              </StyledDescription>
+            </StyledCardContent>
+          </div>
+          <StyledFooter>
             <div
               style={{
                 display: "flex",
-                justifyContent: "space-between",
-                alignContent: "center",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <div style={{ flex: 1 }}>
-                <StyledTitle variant="body1">
-                  {product.product.title}
-                </StyledTitle>
-                <StyledSubtitle variant="subtitle2">
-                  {product.product.brand} - {product.product.category}
-                </StyledSubtitle>
-              </div>
-              <StyledLikeIcon />
+              <StyledPrice variant="h5">
+                ${product.product.price.toFixed(2)}
+              </StyledPrice>
+              {product.product.discountPercentage > 0 && (
+                <StyledDiscount variant="subtitle3">
+                  (-{product.product.discountPercentage}%)
+                </StyledDiscount>
+              )}
             </div>
-            <StyledRating value={product.product.rating} readOnly />
-            <StyledDescription variant="body1" theme={theme}>
-              {truncate(product.product.description, 80)}
-            </StyledDescription>
-          </StyledCardContent>
-        </div>
-        <StyledFooter>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <StyledPrice variant="h5">
-              ${product.product.price.toFixed(2)}
-            </StyledPrice>
-            {product.product.discountPercentage > 0 && (
-              <StyledDiscount variant="subtitle3">
-                (-{product.product.discountPercentage}%)
-              </StyledDiscount>
-            )}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: "1px solid #f4f7f8",
-              borderRadius: "15px",
-              backgroundColor: "#f4f7f8",
-              marginRight: "15px",
-            }}
-          >
-            <StyledButton aria-label="remove from cart">
-              <FaMinus />
-            </StyledButton>
-            <StyledQuantity>{quantity}</StyledQuantity>
-            <StyledButton aria-label="add to cart">
-              <FaPlus />
-            </StyledButton>
-          </div>
-        </StyledFooter>
-      </StyledCard>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "1px solid #127CDF",
+                borderRadius: "15px",
+                backgroundColor: "#127CDF",
+                marginRight: "15px",
+              }}
+            >
+              <StyledButton
+                disableElevation
+                theme={theme}
+                aria-label="remove from cart"
+                onClick={(event) =>
+                  handleRemoveItemFromCart(event, product.product)
+                }
+              >
+                <FaMinus />
+              </StyledButton>
+              <StyledQuantity theme={theme}>{quantity}</StyledQuantity>
+              <StyledButton
+                disableElevation
+                theme={theme}
+                aria-label="add to cart"
+                onClick={(event) => handleAddItemToCart(event, product.product)}
+              >
+                <FaPlus />
+              </StyledButton>
+            </div>
+          </StyledFooter>
+        </StyledCard>
+      </CardActionArea>
     </Grid>
   );
 };

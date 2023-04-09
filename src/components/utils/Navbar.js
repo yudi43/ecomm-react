@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import AppsIcon from "@mui/icons-material/Apps";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -16,6 +17,7 @@ import Grid from "@material-ui/core/Grid";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import SecondaryNavbar from "./SecondaryNavbar";
 import { Divider } from "@material-ui/core";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -32,10 +34,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     display: "flex",
     justifyContent: "flex-start",
+    cursor: "pointer",
   },
   dropdownButton: {
-    // marginLeft: theme.spacing(1),
-    // marginRight: theme.spacing(1),
     borderRadius: "10px",
     backgroundColor: "#005EB5",
     // color: theme.palette.primary1.main,
@@ -121,17 +122,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navbar = ({ categories }) => {
+const Navbar = ({ selectedCategory }) => {
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
+  const [allCategories, setAllCategories] = useState([]);
+
+  useEffect(() => {
+    try {
+      fetch(`https://dummyjson.com/products/categories`)
+        .then((response) => response.json())
+        .then((data) => setAllCategories(data));
+    } catch (error) {
+      console.log("Error fetching categories:", error);
+    }
+  }, []);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleCategorySelect = (cat) => {
+    setAnchorEl(null);
+    navigate(`/categories/${cat}`);
+  };
+
+  const categoryFormatConverter = function (category) {
+    let result = "";
+    if (category.includes("-")) {
+      result = category
+        .replace("-", " ")
+        .split(" ")
+        .map((i) => i.charAt(0).toUpperCase() + i.slice(1) + " ");
+    } else {
+      result = category.charAt(0).toUpperCase() + category.slice(1);
+    }
+    console.log("this is the result", result);
+    return result;
   };
 
   const renderMenuItems = (catgs) => {
@@ -143,8 +174,19 @@ const Navbar = ({ categories }) => {
       >
         {catgs.map((cat, index) => {
           return (
-            <MenuItem key={index} onClick={handleMenuClose}>
-              {cat}
+            <MenuItem
+              divider
+              key={index}
+              onClick={() => handleCategorySelect(cat)}
+            >
+              <Grid container spacing={1}>
+                <Grid item xs={10}>
+                  {categoryFormatConverter(cat)}
+                </Grid>
+                <Grid item xs={2}>
+                  <ArrowRightIcon />
+                </Grid>
+              </Grid>
             </MenuItem>
           );
         })}
@@ -161,7 +203,13 @@ const Navbar = ({ categories }) => {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.Toolbar}>
           {/* Logo */}
-          <Grid className={classes.title}>
+          <Grid
+            onClick={() => {
+              console.log("clicked");
+              navigate(`/`);
+            }}
+            className={classes.title}
+          >
             <Typography variant="h4">QuickBuy</Typography>
             <KeyboardDoubleArrowRightIcon className={classes.logoIcon} />
           </Grid>
@@ -173,11 +221,13 @@ const Navbar = ({ categories }) => {
             >
               <AppsIcon className={classes.ctgIcon} />
               <Typography variant="body1" style={{ marginLeft: "5px" }}>
-                Departments
+                {selectedCategory
+                  ? categoryFormatConverter(selectedCategory)
+                  : "Categories"}
               </Typography>
             </IconButton>
           </Grid>
-          {renderMenuItems(categories)}
+          {renderMenuItems(allCategories)}
           {/* Search Bar */}
           <div className={classes.search}>
             <InputBase
@@ -205,7 +255,7 @@ const Navbar = ({ categories }) => {
         </Toolbar>
       </AppBar>
       <Divider className={classes.divider} />
-      <SecondaryNavbar categories={categories} />
+      <SecondaryNavbar categories={allCategories} />
     </div>
   );
 };

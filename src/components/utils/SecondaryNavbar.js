@@ -1,10 +1,12 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import * as React from "react";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Grid from "@material-ui/core/Grid";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,13 +57,44 @@ const useStyles = makeStyles((theme) => ({
 
 const SecondaryNavbar = ({ categories }) => {
   const classes = useStyles();
+  const [location, setLocation] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json`
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("This was the location returned:", data);
+            setLocation(data.address);
+          })
+          .catch((error) => console.log(error));
+      },
+      (error) => console.log(error)
+    );
+  }, []);
+
+  const handleCategoryClick = (categoryClicked) => {
+    //do something
+    navigate(`/categories/${categoryClicked}`);
+  };
 
   return (
     <Box className={classes.root}>
       <Grid className={classes.dptGrid}>
         <LocationOnIcon className={classes.locationIcon} />
         <Typography variant="subtitle1" className={classes.locationText}>
-          Yelahanka, Bengaluru - 560064
+          {location ? (
+            <p>
+              {location.suburb}, {location.city_district}, {location.city},{" "}
+              {location.postcode}
+            </p>
+          ) : (
+            <p>Loading location...</p>
+          )}
         </Typography>
       </Grid>
       <Box className={classes.buttonsContainer}>
@@ -71,6 +104,7 @@ const SecondaryNavbar = ({ categories }) => {
           .map((item, index) => {
             return (
               <Button
+                onClick={() => handleCategoryClick(item)}
                 key={index}
                 disableElevation
                 disableFocusRipple
