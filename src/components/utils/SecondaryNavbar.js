@@ -150,24 +150,23 @@ const SecondaryNavbar = ({ categories, currentSelectedCategory }) => {
     <Box className={classes.root}>
       <Grid className={classes.dptGrid}>
         <LocationOnIcon className={classes.locationIcon} />
-        <Typography variant="subtitle1" className={classes.locationText}>
+        <Typography variant="subtitle2" className={classes.locationText}>
           {location ? (
             <p>
-              {location.suburb}, {location.city_district}, {location.city},{" "}
-              {location.postcode}
+              {location.suburb}, {location.city}, {location.postcode}
             </p>
           ) : (
-            <p>Loading location...</p>
+            <p>Loading your location...</p>
           )}
         </Typography>
       </Grid>
-      <Box className={classes.buttonsContainer}>
+      <div className={classes.buttonsContainer}>
         {renderCategoryButtons(
           classes.navButtons,
           classes.navButton,
           classes.categories
         )}
-      </Box>
+      </div>
     </Box>
   );
 };

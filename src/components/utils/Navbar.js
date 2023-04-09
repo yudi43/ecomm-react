@@ -150,7 +150,7 @@ const Navbar = ({ selectedCategory }) => {
     } catch (error) {
       console.log("Error fetching categories:", error);
     }
-  }, [allCategories]);
+  }, [selectedCategory]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

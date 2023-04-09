@@ -20,7 +20,7 @@ function ProductList({ selectedCategory }) {
         setProducts(data.products);
         setLoading(false);
       });
-  }, [page, selectedCategory, products]);
+  }, [page, selectedCategory]);
 
   return (
     <Box sx={{ flexGrow: 1, mt: 3 }}>

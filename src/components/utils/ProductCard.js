@@ -11,8 +11,8 @@ import { Rating } from "@material-ui/lab";
 import { FaRegHeart } from "react-icons/fa";
 import styled, { css } from "styled-components";
 import theme from "../../themes/theme";
-import { Add, Remove } from "@material-ui/icons";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const StyledCard = styled(Card)`
   margin: 0.4rem;
@@ -95,15 +95,16 @@ const StyledQuantity = styled.div`
   ${(props) => css`
     background-color: ${props.theme.palette.primary1.main};
     color: ${props.theme.palette.bg.main};
-    //
   `}
   display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
   align-items: center;
-  // font-weight: bold;
   font-size: 1.5em;
+  font-weight: bold;
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled.div`
   ${(props) => css`
     background-color: ${props.theme.palette.primary1.main};
     color: ${props.theme.palette.bg.main};
@@ -122,50 +123,29 @@ const StyledButton = styled.button`
   margin: 0 0.5rem;
 `;
 
-const AddToCartContainer = styled.div`
-  display: "flex",
-  align-items: "center",
-  justify-content: "center",
-  border: "4px solid #127CDF",
-  border-radius: "15px",
-  background-color: "#127CDF",
-  margin-right: "15px",
-`;
-
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(0);
   function truncate(str, n) {
     return str.length > n ? str.slice(0, n - 1) + "..." : str;
   }
 
-  const handleAdd = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
-
-  const handleRemove = () => {
-    if (quantity > 1) {
-      setQuantity((prevQuantity) => prevQuantity - 1);
-    }
-  };
-
   const handleRemoveItemFromCart = (event, prd) => {
     // remove product 'prd' from cart
     event.stopPropagation();
+    if (quantity > 0) setQuantity((prevQuantity) => prevQuantity - 1);
   };
 
   const handleAddItemToCart = (event, prd) => {
     // add product 'prd' to cart
     event.stopPropagation();
+    setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const handleProductCardClick = (event, prd) => {
-    // add product 'prd' to cart
-    console.log("this was the event variable: ", event);
-    console.log("clicked on the card with product as : ", prd);
-
     // navigate user from here to product detail page with id of the product
     let productId = prd.product.id;
-    console.log("This is the productId", productId);
+    navigate(`/products/${productId}`);
   };
 
   return (
@@ -223,6 +203,7 @@ const ProductCard = ({ product }) => {
             </div>
             <div
               style={{
+                padding: "5px 10px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -232,25 +213,34 @@ const ProductCard = ({ product }) => {
                 marginRight: "15px",
               }}
             >
-              <StyledButton
-                disableElevation
-                theme={theme}
-                aria-label="remove from cart"
-                onClick={(event) =>
-                  handleRemoveItemFromCart(event, product.product)
-                }
-              >
-                <FaMinus />
-              </StyledButton>
+              <div>
+                {/* Remove from cart button */}
+                <StyledButton
+                  disableElevation
+                  theme={theme}
+                  aria-label="remove from cart"
+                  onClick={(event) =>
+                    handleRemoveItemFromCart(event, product.product)
+                  }
+                >
+                  <FaMinus />
+                </StyledButton>
+              </div>
+              {/* Currently added quantities */}
               <StyledQuantity theme={theme}>{quantity}</StyledQuantity>
-              <StyledButton
-                disableElevation
-                theme={theme}
-                aria-label="add to cart"
-                onClick={(event) => handleAddItemToCart(event, product.product)}
-              >
-                <FaPlus />
-              </StyledButton>
+              {/* Add to cart button */}
+              <div>
+                <StyledButton
+                  disableElevation
+                  theme={theme}
+                  aria-label="add to cart"
+                  onClick={(event) =>
+                    handleAddItemToCart(event, product.product)
+                  }
+                >
+                  <FaPlus />
+                </StyledButton>
+              </div>
             </div>
           </StyledFooter>
         </StyledCard>

@@ -6,11 +6,8 @@ import Navbar from "./utils/Navbar";
 
 function LandingPage() {
   const theme = useTheme();
-
-  let categoryGrouping = {};
-
   const [loading, setLoading] = useState(true);
-  const [allCategories, setAllCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState(null);
 
   useEffect(() => {
     console.log("UseEffect of LandingPage");
@@ -24,7 +21,7 @@ function LandingPage() {
     } catch (error) {
       console.log("Error fetching categories:", error);
     }
-  }, [allCategories]);
+  }, []);
 
   return (
     <div>
