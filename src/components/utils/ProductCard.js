@@ -216,7 +216,7 @@ const ProductCard = ({ product }) => {
                 ${product.product.price.toFixed(2)}
               </StyledPrice>
               {product.product.discountPercentage > 0 && (
-                <StyledDiscount variant="subtitle3">
+                <StyledDiscount variant="subtitle1">
                   (-{product.product.discountPercentage}%)
                 </StyledDiscount>
               )}

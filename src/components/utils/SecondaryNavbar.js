@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   buttonsContainer: {
     marginRight: theme.spacing(2),
   },
+  // selected button
   navButton: {
     height: "100%",
     color: theme.palette.secondary.main,
@@ -32,11 +33,14 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary1Dark.another,
     },
   },
+  navButtons: {
+    color: theme.palette.bg.main,
+    fontSize: "0.8em",
+  },
   categories: {
     textTransform: "capitalize",
-    color: theme.palette.bg.main,
     fontWeight: "bold",
-    fontSize: "1em",
+    fontSize: "0.9em",
   },
   dptGrid: {
     display: "None",
@@ -68,6 +72,7 @@ const SecondaryNavbar = ({ categories, currentSelectedCategory }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("UseEffect of SecondaryNavBar");
     navigator.geolocation.getCurrentPosition(
       (position) => {
         fetch(
@@ -87,43 +92,58 @@ const SecondaryNavbar = ({ categories, currentSelectedCategory }) => {
     navigate(`/categories/${categoryClicked}`); //navigate the user to Category page
   };
 
-  const renderCategoryButtons = (navButtonCssClass, categoryTextCssClass) => {
-    return categories
-      .slice(0, 20)
-      .filter((item) => !item.includes("men"))
-      .map((singleCategory, index) => {
-        if (singleCategory === currentSelectedCategory) {
-          return (
-            <Button
-              className={navButtonCssClass}
-              variant="contained"
-              onClick={() => handleCategoryClick(singleCategory)}
-              key={index}
-              disableElevation
-              disableFocusRipple
-              disableRipple
-            >
-              <Typography variant="subtitle1" className={categoryTextCssClass}>
-                {singleCategory}
-              </Typography>
-            </Button>
-          );
-        } else {
-          return (
-            <Button
-              onClick={() => handleCategoryClick(singleCategory)}
-              key={index}
-              disableElevation
-              disableFocusRipple
-              disableRipple
-            >
-              <Typography variant="subtitle1" className={categoryTextCssClass}>
-                {singleCategory}
-              </Typography>
-            </Button>
-          );
-        }
-      });
+  const renderCategoryButtons = (
+    navButtons,
+    navButtonCssClass,
+    categoryTextCssClass
+  ) => {
+    if (categories) {
+      return categories
+        .slice(0, 20)
+        .filter((item) => !item.includes("men"))
+        .map((singleCategory, index) => {
+          if (singleCategory === currentSelectedCategory) {
+            return (
+              <Button
+                className={navButtonCssClass}
+                variant="contained"
+                onClick={() => handleCategoryClick(singleCategory)}
+                key={index}
+                disableElevation
+                disableFocusRipple
+                disableRipple
+              >
+                <Typography
+                  variant="subtitle1"
+                  className={categoryTextCssClass}
+                >
+                  {singleCategory}
+                </Typography>
+              </Button>
+            );
+          } else {
+            return (
+              <Button
+                className={navButtons}
+                onClick={() => handleCategoryClick(singleCategory)}
+                key={index}
+                disableElevation
+                disableFocusRipple
+                disableRipple
+              >
+                <Typography
+                  variant="subtitle1"
+                  className={categoryTextCssClass}
+                >
+                  {singleCategory}
+                </Typography>
+              </Button>
+            );
+          }
+        });
+    } else {
+      return <div></div>;
+    }
   };
 
   return (
@@ -142,7 +162,11 @@ const SecondaryNavbar = ({ categories, currentSelectedCategory }) => {
         </Typography>
       </Grid>
       <Box className={classes.buttonsContainer}>
-        {renderCategoryButtons(classes.navButton, classes.categories)}
+        {renderCategoryButtons(
+          classes.navButtons,
+          classes.navButton,
+          classes.categories
+        )}
       </Box>
     </Box>
   );

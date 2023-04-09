@@ -108,12 +108,24 @@ const useStyles = makeStyles((theme) => ({
       display: "block",
     },
   },
-  ctgIcon: {
-    color: theme.palette.secondary.main,
-  },
+  // ctgIcon: {
+  //   color: theme.palette.secondary.main,
+  // },
   logoIcon: {
     color: theme.palette.secondary.main,
     fontSize: "large",
+  },
+  logoTitle: {
+    fontWeight: "lighter",
+    fontSize: "1.2rem",
+    "@media (min-width:600px)": {
+      fontSize: "1.5rem",
+      fontWeight: "lighter",
+    },
+    [theme.breakpoints.up("md")]: {
+      fontSize: "1.8rem",
+      fontWeight: "lighter",
+    },
   },
   divider: {
     backgroundColor: theme.palette.primary2.main,
@@ -127,9 +139,10 @@ const Navbar = ({ selectedCategory }) => {
   const [searchValue, setSearchValue] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
-  const [allCategories, setAllCategories] = useState([]);
+  const [allCategories, setAllCategories] = useState(null);
 
   useEffect(() => {
+    console.log("UseEffect of NavBar");
     try {
       fetch(`https://dummyjson.com/products/categories`)
         .then((response) => response.json())
@@ -137,7 +150,7 @@ const Navbar = ({ selectedCategory }) => {
     } catch (error) {
       console.log("Error fetching categories:", error);
     }
-  }, []);
+  }, [allCategories]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -171,24 +184,28 @@ const Navbar = ({ selectedCategory }) => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        {catgs.map((cat, index) => {
-          return (
-            <MenuItem
-              divider
-              key={index}
-              onClick={() => handleCategorySelect(cat)}
-            >
-              <Grid container spacing={1}>
-                <Grid item xs={10}>
-                  {categoryFormatConverter(cat)}
+        {catgs ? (
+          catgs.map((cat, index) => {
+            return (
+              <MenuItem
+                divider
+                key={index}
+                onClick={() => handleCategorySelect(cat)}
+              >
+                <Grid container spacing={1}>
+                  <Grid item xs={10}>
+                    {categoryFormatConverter(cat)}
+                  </Grid>
+                  <Grid item xs={2}>
+                    <ArrowRightIcon />
+                  </Grid>
                 </Grid>
-                <Grid item xs={2}>
-                  <ArrowRightIcon />
-                </Grid>
-              </Grid>
-            </MenuItem>
-          );
-        })}
+              </MenuItem>
+            );
+          })
+        ) : (
+          <div></div>
+        )}
       </Menu>
     );
   };
@@ -209,7 +226,7 @@ const Navbar = ({ selectedCategory }) => {
             }}
             className={classes.title}
           >
-            <Typography variant="h4">QuickBuy</Typography>
+            <div className={classes.logoTitle}>QuickBuy</div>
             <KeyboardDoubleArrowRightIcon className={classes.logoIcon} />
           </Grid>
           {/* Dropdown Button */}
@@ -226,7 +243,7 @@ const Navbar = ({ selectedCategory }) => {
               </Typography>
             </IconButton>
           </Grid>
-          {renderMenuItems(allCategories)}
+          {allCategories ? renderMenuItems(allCategories) : <div></div>}
           {/* Search Bar */}
           <div className={classes.search}>
             <InputBase

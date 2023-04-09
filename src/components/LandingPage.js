@@ -13,18 +13,18 @@ function LandingPage() {
   const [allCategories, setAllCategories] = useState([]);
 
   useEffect(() => {
+    console.log("UseEffect of LandingPage");
     try {
       fetch(`https://dummyjson.com/products/categories`)
         .then((response) => response.json())
         .then((data) => {
           setAllCategories(data);
           setLoading(false);
-          // setAllCategories(categoryGrouping);
         });
     } catch (error) {
       console.log("Error fetching categories:", error);
     }
-  }, []);
+  }, [allCategories]);
 
   return (
     <div>
@@ -35,28 +35,3 @@ function LandingPage() {
 }
 
 export default LandingPage;
-
-// data.forEach((item) => {
-//   if(item.includes("womens-")) {
-//     if ("Women" in categoryGrouping) {
-//       categoryGrouping["Women"].push(item);
-//     } else {
-//       categoryGrouping["Women"] = [];
-//     }
-//   }
-//   else if(item.includes("mens-") && !item.includes("womens-")) {
-//     if ("Men" in categoryGrouping) {
-//       categoryGrouping["Men"].push(item);
-//     } else {
-//       categoryGrouping["Men"] = [];
-//     }
-//   }
-//   else {
-//     if ("Others" in categoryGrouping) {
-//       categoryGrouping["Others"].push(item);
-//     } else {
-//       categoryGrouping["Others"] = [];
-//     }
-
-//   }
-// })
