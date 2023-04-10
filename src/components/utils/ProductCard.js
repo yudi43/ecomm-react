@@ -12,7 +12,8 @@ import { FaRegHeart } from "react-icons/fa";
 import styled, { css } from "styled-components";
 import theme from "../../themes/theme";
 import { FaMinus, FaPlus } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import ProductDescModal from "../ProductDescModal";
+// import { useNavigate } from "react-router-dom";
 
 const StyledCard = styled(Card)`
   margin: 0.4rem;
@@ -22,6 +23,7 @@ const StyledCard = styled(Card)`
 const StyledCardMedia = styled(CardMedia)`
   height: 0;
   padding-top: 50%;
+  width: 100%;
 `;
 
 const StyledCardContent = styled(CardContent)`
@@ -124,7 +126,8 @@ const StyledButton = styled.div`
 `;
 
 const ProductCard = ({ product }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const [quantity, setQuantity] = useState(0);
   function truncate(str, n) {
     return str.length > n ? str.slice(0, n - 1) + "..." : str;
@@ -145,107 +148,116 @@ const ProductCard = ({ product }) => {
   const handleProductCardClick = (event, prd) => {
     // navigate user from here to product detail page with id of the product
     let productId = prd.product.id;
-    navigate(`/products/${productId}`);
+    // navigate(`/products/${productId}`);
+    setShowModal(true);
   };
 
   return (
-    <Grid item xs={12} sm={6} md={4} lg={3}>
-      <CardActionArea
-        onClick={(event) => handleProductCardClick(event, product)}
-      >
-        <StyledCard>
-          <StyledCardMedia
-            image={product.product.thumbnail}
-            title={product.product.title}
-          />
+    <>
+      {showModal && (
+        <ProductDescModal
+          product={product}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+      <Grid item xs={12} sm={6} md={4} lg={3}>
+        <CardActionArea
+          onClick={(event) => handleProductCardClick(event, product)}
+        >
+          <StyledCard>
+            <StyledCardMedia
+              image={product.product.thumbnail}
+              title={product.product.title}
+            />
 
-          <div>
-            <StyledCardContent>
+            <div>
+              <StyledCardContent>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignContent: "center",
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <StyledTitle variant="body1">
+                      {product.product.title}
+                    </StyledTitle>
+                    <StyledSubtitle variant="subtitle2">
+                      {product.product.brand} - {product.product.category}
+                    </StyledSubtitle>
+                  </div>
+                  <StyledLikeIcon />
+                </div>
+                <StyledRating value={product.product.rating} readOnly />
+                <StyledDescription variant="body1" theme={theme}>
+                  {truncate(product.product.description, 80)}
+                </StyledDescription>
+              </StyledCardContent>
+            </div>
+            <StyledFooter>
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  alignContent: "center",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
               >
-                <div style={{ flex: 1 }}>
-                  <StyledTitle variant="body1">
-                    {product.product.title}
-                  </StyledTitle>
-                  <StyledSubtitle variant="subtitle2">
-                    {product.product.brand} - {product.product.category}
-                  </StyledSubtitle>
+                <StyledPrice variant="h5">
+                  ${product.product.price.toFixed(2)}
+                </StyledPrice>
+                {product.product.discountPercentage > 0 && (
+                  <StyledDiscount variant="subtitle1">
+                    (-{product.product.discountPercentage}%)
+                  </StyledDiscount>
+                )}
+              </div>
+              <div
+                style={{
+                  padding: "5px 10px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: "1px solid #127CDF",
+                  borderRadius: "15px",
+                  backgroundColor: "#127CDF",
+                  marginRight: "15px",
+                }}
+              >
+                <div>
+                  {/* Remove from cart button */}
+                  <StyledButton
+                    disableElevation
+                    theme={theme}
+                    aria-label="remove from cart"
+                    onClick={(event) =>
+                      handleRemoveItemFromCart(event, product.product)
+                    }
+                  >
+                    <FaMinus />
+                  </StyledButton>
                 </div>
-                <StyledLikeIcon />
+                {/* Currently added quantities */}
+                <StyledQuantity theme={theme}>{quantity}</StyledQuantity>
+                {/* Add to cart button */}
+                <div>
+                  <StyledButton
+                    disableElevation
+                    theme={theme}
+                    aria-label="add to cart"
+                    onClick={(event) =>
+                      handleAddItemToCart(event, product.product)
+                    }
+                  >
+                    <FaPlus />
+                  </StyledButton>
+                </div>
               </div>
-              <StyledRating value={product.product.rating} readOnly />
-              <StyledDescription variant="body1" theme={theme}>
-                {truncate(product.product.description, 80)}
-              </StyledDescription>
-            </StyledCardContent>
-          </div>
-          <StyledFooter>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <StyledPrice variant="h5">
-                ${product.product.price.toFixed(2)}
-              </StyledPrice>
-              {product.product.discountPercentage > 0 && (
-                <StyledDiscount variant="subtitle1">
-                  (-{product.product.discountPercentage}%)
-                </StyledDiscount>
-              )}
-            </div>
-            <div
-              style={{
-                padding: "5px 10px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "1px solid #127CDF",
-                borderRadius: "15px",
-                backgroundColor: "#127CDF",
-                marginRight: "15px",
-              }}
-            >
-              <div>
-                {/* Remove from cart button */}
-                <StyledButton
-                  disableElevation
-                  theme={theme}
-                  aria-label="remove from cart"
-                  onClick={(event) =>
-                    handleRemoveItemFromCart(event, product.product)
-                  }
-                >
-                  <FaMinus />
-                </StyledButton>
-              </div>
-              {/* Currently added quantities */}
-              <StyledQuantity theme={theme}>{quantity}</StyledQuantity>
-              {/* Add to cart button */}
-              <div>
-                <StyledButton
-                  disableElevation
-                  theme={theme}
-                  aria-label="add to cart"
-                  onClick={(event) =>
-                    handleAddItemToCart(event, product.product)
-                  }
-                >
-                  <FaPlus />
-                </StyledButton>
-              </div>
-            </div>
-          </StyledFooter>
-        </StyledCard>
-      </CardActionArea>
-    </Grid>
+            </StyledFooter>
+          </StyledCard>
+        </CardActionArea>
+      </Grid>
+    </>
   );
 };
 

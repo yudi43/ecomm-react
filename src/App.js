@@ -4,7 +4,7 @@ import "./App.css"; // Import your CSS file for styles
 import theme from "./themes/theme";
 import LandingPage from "./components/LandingPage";
 import Category from "./components/Category";
-import ProductDetail from "./components/ProductDetails";
+import ProductDetail from "./components/ProductDetail";
 
 const App = () => {
   return (
